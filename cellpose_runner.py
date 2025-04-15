@@ -29,8 +29,8 @@ def run_cellpose_segmentation(image_path, diameter=None):
     print("Running segmentation...")
     masks, flows, styles = model.eval(img, diameter=diameter, channels=channels)
    
-    # github attempt
-    diams, _ = model.sz.eval(image_stack, channels=[0, 0])  # channels=[0, 0] for grayscale images
+    # estimate diameter TODO
+    diams, _ = model.sz.eval([img], channels=channels)  # channels=[0, 0] for grayscale images
     diams = np.maximum(5.0, diams)  # Ensure a minimum diameter of 5 pixels
     print(diams)
 
