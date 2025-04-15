@@ -6,6 +6,28 @@ import numpy as np
 import matplotlib.pyplot as plt
 from cellpose import plot
 from skimage import exposure
+def calibrate_size(image, channels=[0, 0]):
+    """
+    Function to estimate cell diameter using the cyto3 model.
+    
+    Parameters:
+        image (numpy.ndarray): The input image (grayscale or RGB).
+        channels (list): The channels to use for segmentation (default: [0, 0] for grayscale).
+        
+    Returns:
+        float: Estimated cell diameter in pixels.
+    """
+    # Initialize the cellpose model with the "cyto3" model
+    model = models.Cellpose(gpu=False, model_type="cyto3")
+    
+    # Run the model to estimate diameters
+    diameters, _ = model.sz.eval(image, channels=channels)
+
+    # Ensure a minimum diameter of 5.0 pixels
+    estimated_diameter = max(5.0, diameters)
+    print(f"Estimated cell diameter: {estimated_diameter} pixels")
+    
+    return estimated_diameter
 
 def run_cellpose_segmentation(image_path, diameter=None):
     '''
@@ -19,7 +41,9 @@ def run_cellpose_segmentation(image_path, diameter=None):
     # note that the GUI automatically preprocesses images, which is pretty problematic for me but TODO find exactly what it does and imitate
     # TODO on second thought, this might be done automatically in model.eval or something, and might not even be so important (check/justify if true)
     # what is really important though is getting the calibration to work TODO !!!
-    img = exposure.rescale_intensity(img)   # check if toggling on/off even makes a difference
+    # img = exposure.rescale_intensity(img)   # check if toggling on/off even makes a difference
+
+    estimated_diameter = calibrate_size(img)
 
     # create model
     model = models.CellposeModel(gpu=False, model_type='cyto3')
@@ -29,12 +53,7 @@ def run_cellpose_segmentation(image_path, diameter=None):
     print("Running segmentation...")
     masks, flows, styles = model.eval(img, diameter=diameter, channels=channels)
    
-    # estimate diameter TODO
-    diams, _ = model.sz.eval([img], channels=channels)  # channels=[0, 0] for grayscale images
-    diams = np.maximum(5.0, diams)  # Ensure a minimum diameter of 5 pixels
-    print(diams)
 
-    # is this thing properly calibrated?
     estimated_diameter = model.diam_labels.item()
     print("Used diameter", estimated_diameter)
 
