@@ -8,7 +8,6 @@ from cellpose import plot
 
 
 def cells_with_foci(brightfield_path, fluorescent_path):
-    # TODO add parameters for all functions being used here
     
     # get cell masks from brightfield image
     print("Segmenting")
@@ -22,8 +21,8 @@ def cells_with_foci(brightfield_path, fluorescent_path):
     cells_with_aggregates = []
 
     # for each aggregate coordinate, check which cell mask it falls within
-    for x,y in aggregate_coords:
-        cell_id = cell_masks[x,y]
+    for y,x in aggregate_coords:
+        cell_id = cell_masks[y,x]
         if cell_id > 0:    # ie not background - this shouldn't happen anyway but just in case
             cells_with_aggregates.append(cell_id)
 
@@ -52,9 +51,13 @@ def visualize_results(cell_masks, cells_with_aggregates, fluorescent_img):
 
 
 if __name__ == "__main__":
-    brightfield_path = '/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_log_brightfield.png' 
-    fluorescent_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/enhanced_E3Q_log_fluorescent.png" 
+    # brightfield_path = '/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_log_brightfield.png' 
+    # fluorescent_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/enhanced_E3Q_log_fluorescent.png" 
     # fluorescent_path = '/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_log_fluorescent.png' 
+    brightfield_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_t0_brightfield.png" 
+    fluorescent_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_t0_fluorescent.png" 
+
+
     cells_with_aggregates, cell_masks = cells_with_foci(brightfield_path, fluorescent_path)
 
 
