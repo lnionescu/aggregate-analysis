@@ -65,29 +65,28 @@ class FociCLI(cmd.Cmd):
         self.cell_diameter = None if diameter <=0 else diameter
         print(f"Cell diameter set to: {'auto-calibrated' if diameter <=0 else diameter}")
 
-    def do_set_structure_element_size(self, line):
-        # TODO explain how tweaking this parameter qualitatively changes the result
-        
+    def do_set_structure_element_size(self, line): 
         '''
         sets the structure element size for the tophat filter used in aggregate detection
+        larger values detect larger aggregates, smaller values detect finer details
         '''
         size = input("Enter the structure element size for the tophat filter: ")
         self.structure_element_size = size
         print(f"Structure element size set to {size}")
 
     def do_set_min_distance(self, line):
-        # TODO explain how tweaking this parameter qualitatively changes the result
         '''
-        minimum distance between peaks, used in the aggregate detection 
+        minimum distance between peaks, used in the aggregate detection
+        larger values decrease sensitivty, smaller values will detect more aggregates but i don't think it's important that this is extremely small since aggregates don't tend to be so close to each other?
         '''
         distance = input("Enter the minimum distance between bright spots for aggregate detection: ")
         self.min_distance = distance
         print(f"Minimum distance set to {distance}")
 
     def do_set_threshold(self, line):
-        # TODO explain how tweaking this parameter qualitatively changes the result
         '''
-        brightness threshold, used in the aggregate detection 
+        brightness threshold, used in the aggregate detection
+        higher values detect only very bright aggregates, smaller values increase sensitivity
         '''
         threshold = input("Enter brightness threshold for aggregate detection: ")
         self.threshold = threshold
@@ -122,7 +121,21 @@ class FociCLI(cmd.Cmd):
         self.cells_with_aggregates, self.cell_masks = cells_with_foci(self.brightfield_path, self.fluorescent_path, cell_diameter=self.cell_diameter, structure_element_size=self.structure_element_size, min_distance=self.min_distance, threshold=self.threshold)
 
 
+    def do_save_results(self):
+        '''
+        saves analysis results to the specified output folder
+        '''
+        if not self.output_dir:
+             print("Saving the results requires an output folder, use that command first")
+             return
 
+        if self.cell_masks:
+            np.save(os.path.join(self.output_dir, "cell_masks.npy"), self.cell_masks)
+            print("Cell masks saved as numpy array")
+
+        if self.cells_with_aggregates:
+            np.save(os.path.join(self.output_dir, "cells_with_aggregates.npy"), np.array(self.cells_with_aggregates))
+            print("Cells with aggregates saved as a numpy array of integers corresponding to the cell IDs with aggregates")
 
 
 
@@ -131,10 +144,6 @@ class FociCLI(cmd.Cmd):
         exits the program
         '''
         return True
-
-
-
-
 
 
 
