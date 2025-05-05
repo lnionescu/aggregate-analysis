@@ -77,6 +77,30 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
     return cell_measurements
 
 
+def visualize_metrics(fluorescent_img_path):
+    cell_measurements = cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates)
+    
+    # convert to pandas dataframe 
+    cell_measurements_df = pd.DataFrame.from_dict(cell_measurements, orient='index')
+
+    # filter rows for cells with aggregates
+    df_with_aggregates = cell_measurements_df[cell_measurements_df['has_aggregate'] == True]
+
+    # scatter plot: mean aggregate intensity vs mean cell intensity (ie cell excluding the aggregate) - these quantities can be seen as concentration of dissolved/aggregated protein
+    sns.scatterplot(data = df_with_aggregates, x = 'cell_mean_intensity', y = 'aggregate_mean_intensity')
+    plt.title("Mean aggregate intensity vs mean cell (excluding the aggregate) intensity")
+    plt.xlabel("Mean cell (excluding the aggregate) intensity")
+    plt.ylabel("Mean aggregate intensity")
+    plt.show()
+
+
+
+
+
+
+
+
+
 if __name__ == '__main__':
     # compre mutant E3Q at the beginning and end
     brightfield_path = '/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_log_brightfield.png' 
@@ -85,7 +109,7 @@ if __name__ == '__main__':
     # fluorescent_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_t0_fluorescent.png"
     cells_with_aggregates, cell_masks = cells_with_foci(brightfield_path, fluorescent_path)
     cell_metrics(fluorescent_path, cell_masks, cells_with_aggregates)
-
+    visualize_metrics(fluorescent_path)
 
 
 
