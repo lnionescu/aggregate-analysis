@@ -57,16 +57,16 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
 
            # for cells with foci, make it such that cell metrics exclude the aggregates
            # this overwrites the metrics calculated above for all cells, but both can be stored if necessary
-           cell_mean_intensity = np.mean(fluorescent_img[remaining_cell_mask])
-           cell_total_intensity = np.sum(fluorescent_img[remaining_cell_mask])
+           rest_of_cell_mean_intensity = np.mean(fluorescent_img[remaining_cell_mask])
+           rest_of_cell_total_intensity = np.sum(fluorescent_img[remaining_cell_mask])
 
-           cell_measurements[cell_id] = {'has_aggregate': has_aggregate, 'cell_area': cell_area, 'cell_mean_intensity': cell_mean_intensity, 'cell_total_intensity': cell_total_intensity, 'aggregate_total_intensity': aggregate_total_intensity, 'aggregate_mean_intensity': aggregate_mean_intensity}
+           cell_measurements[cell_id] = {'has_aggregate': has_aggregate, 'cell_area': cell_area, 'cell_mean_intensity': cell_mean_intensity, 'cell_total_intensity': cell_total_intensity, 'aggregate_total_intensity': aggregate_total_intensity, 'aggregate_mean_intensity': aggregate_mean_intensity, 'rest_of_cell_mean_intensity': rest_of_cell_mean_intensity, 'rest_of_cell_total_intensity': rest_of_cell_total_intensity}
 
 
             
         # metrics to store for cells without foci
         if not has_aggregate:    
-            cell_measurements[cell_id] = {'has_aggregate': has_aggregate, 'cell_area': cell_area, 'mean_intensity': cell_mean_intensity, 'total_intensity': cell_total_intensity}
+            cell_measurements[cell_id] = {'has_aggregate': has_aggregate, 'cell_area': cell_area, 'cell_mean_intensity': cell_mean_intensity, 'cell_total_intensity': cell_total_intensity}
         
         # agg_count = sum(1 for cell_data in cell_measurements.values() if cell_data.get('has_aggregate') is True)
 
@@ -86,7 +86,7 @@ def visualize_metrics(fluorescent_img_path):
     # filter rows for cells with aggregates
     df_with_aggregates = cell_measurements_df[cell_measurements_df['has_aggregate'] == True]
 
-    # scatter plot: mean aggregate intensity vs mean cell intensity (ie cell excluding the aggregate) - these quantities can be seen as concentration of dissolved/aggregated protein
+    # scatter plot: mean aggregate intensity vs mean total cell (including the aggregate) intensity 
     sns.scatterplot(data = df_with_aggregates, x = 'cell_mean_intensity', y = 'aggregate_mean_intensity')
     plt.title("Mean aggregate intensity vs mean cell (excluding the aggregate) intensity")
     plt.xlabel("Mean cell (excluding the aggregate) intensity")
