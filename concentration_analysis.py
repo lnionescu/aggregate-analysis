@@ -1,6 +1,7 @@
 import numpy as np
 from cells_with_foci import cells_with_foci
 from skimage.io import imread
+from aggregate_detector import detect_aggregates
 
 def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
     '''
@@ -22,9 +23,9 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
     for cell_id in unique_cells:
         # select the pixels from the cell masks that belong to the current cell, to perform measurements on
         cell_mask = cell_masks == cell_id
-        print(cell_mask)
-        
-        # different metrics are important depending on whether the cell contains an aggregate or not
+        # print(cell_mask)
+       
+        # identify whether the current cell is among cells_with_aggregates
         has_aggregate = cell_id in cells_with_aggregates
 
         # cell area - number of pixels in the mask
@@ -34,12 +35,40 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
         cell_mean_intensity = np.mean(fluorescent_img[cell_mask])
         cell_total_intensity = cell_area * cell_mean_intensity
 
-        cell_measurements[cell_id] = {'has_aggregate': has_aggregate, 'cell_area': cell_area, 'mean_intensity': cell_mean_intensity, 'total_intensity': cell_total_intensity}
+        # for cells with foci: quantify the mean and total intensity of the aggregate
+        if has_aggregate:
+           _, _, aggregate_coords = detect_aggregates(fluorescent_img_path)
+
+           # mask that contains the aggregate in the current cell
+           aggregate_mask = np.zeros_like(cell_mask, dtype=bool)
+           for y, x in aggregate_coords:
+               if cell_mask[y, x] is True:     # is the aggregate within the current cell?
+                   aggregate_mask[y, x] = True
+
+            # total and mean intensity of the foci
+           aggregate_total_intensity = np.sum(fluorescent_img[aggregate_mask])
+           aggregate_mean_intensity = np.mean(fluorescent_img[aggregate_mask])
+
+           # mask out aggregates to get metrics about the rest of the cell, bitwise
+           remaining_cell_mask = cell_mask & ~aggregate_mask
+
+           # for cells with foci, make it such that cell metrics exclude the aggregates
+           # this overwrites the metrics calculated above for all cells, but both can be stored if necessary
+           cell_mean_intensity = np.mean(fluorescent_img[remaining_cell_mask])
+           cell_total_intensity = np.sum(fluorescent_img[remaining_cell_mask])
+
+           cell_measurements[cell_id] = {'has_aggregate': has_aggregate, 'cell_area': cell_area, 'cell_mean_intensity': cell_mean_intensity, 'cell_total_intensity': cell_total_intensity, 'aggregate_total_intensity': aggregate_total_intensity, 'aggregate_mean_intensity': aggregate_mean_intensity}
+
+
+            
+        # metrics to store for cells without foci
+        if not has_aggregate:    
+            cell_measurements[cell_id] = {'has_aggregate': has_aggregate, 'cell_area': cell_area, 'mean_intensity': cell_mean_intensity, 'total_intensity': cell_total_intensity}
+        
         agg_count = sum(1 for cell_data in cell_measurements.values() if cell_data.get('has_aggregate') is True)
+
         print('Dictionary says that',agg_count, 'cells have aggregates')
 
-
-        #TODO continue and try on an example image
 
     print(cell_measurements)
     return cell_measurements
