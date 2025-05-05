@@ -2,6 +2,9 @@ import numpy as np
 from cells_with_foci import cells_with_foci
 from skimage.io import imread
 from aggregate_detector import detect_aggregates
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
     '''
@@ -42,7 +45,7 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
            # mask that contains the aggregate in the current cell
            aggregate_mask = np.zeros_like(cell_mask, dtype=bool)
            for y, x in aggregate_coords:
-               if cell_mask[y, x] is True:     # is the aggregate within the current cell?
+               if cell_mask[y, x]:     # is the aggregate within the current cell?
                    aggregate_mask[y, x] = True
 
             # total and mean intensity of the foci
@@ -65,9 +68,9 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
         if not has_aggregate:    
             cell_measurements[cell_id] = {'has_aggregate': has_aggregate, 'cell_area': cell_area, 'mean_intensity': cell_mean_intensity, 'total_intensity': cell_total_intensity}
         
-        agg_count = sum(1 for cell_data in cell_measurements.values() if cell_data.get('has_aggregate') is True)
+        # agg_count = sum(1 for cell_data in cell_measurements.values() if cell_data.get('has_aggregate') is True)
 
-        print('Dictionary says that',agg_count, 'cells have aggregates')
+        # print('Dictionary says that',agg_count, 'cells have aggregates')
 
 
     print(cell_measurements)
