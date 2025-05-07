@@ -38,6 +38,10 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
         cell_mean_intensity = np.mean(fluorescent_img[cell_mask])
         cell_total_intensity = cell_area * cell_mean_intensity
 
+        # variance and standard deviation of the intensity across the entire cell
+        cell_variance_intensity = np.var(fluorescent_img[cell_mask])
+        cell_sd_intensity = np.std(fluorescent_img[cell_mask])
+
         # for cells with foci: quantify the mean and total intensity of the aggregate
         if has_aggregate:
            _, _, aggregate_coords = detect_aggregates(fluorescent_img_path)
@@ -56,17 +60,15 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
            remaining_cell_mask = cell_mask & ~aggregate_mask
 
            # for cells with foci, make it such that cell metrics exclude the aggregates
-           # this overwrites the metrics calculated above for all cells, but both can be stored if necessary
            rest_of_cell_mean_intensity = np.mean(fluorescent_img[remaining_cell_mask])
            rest_of_cell_total_intensity = np.sum(fluorescent_img[remaining_cell_mask])
 
-           cell_measurements[cell_id] = {'has_aggregate': has_aggregate, 'cell_area': cell_area, 'cell_mean_intensity': cell_mean_intensity, 'cell_total_intensity': cell_total_intensity, 'aggregate_total_intensity': aggregate_total_intensity, 'aggregate_mean_intensity': aggregate_mean_intensity, 'rest_of_cell_mean_intensity': rest_of_cell_mean_intensity, 'rest_of_cell_total_intensity': rest_of_cell_total_intensity}
-
+           cell_measurements[cell_id] = {'has_aggregate': has_aggregate, 'cell_area': cell_area, 'cell_mean_intensity': cell_mean_intensity, 'cell_total_intensity': cell_total_intensity, 'cell_variance_intensity': cell_variance_intensity, 'cell_sd_intensity': cell_sd_intensity, 'aggregate_total_intensity': aggregate_total_intensity, 'aggregate_mean_intensity': aggregate_mean_intensity, 'rest_of_cell_mean_intensity': rest_of_cell_mean_intensity, 'rest_of_cell_total_intensity': rest_of_cell_total_intensity}
 
             
         # metrics to store for cells without foci
         if not has_aggregate:    
-            cell_measurements[cell_id] = {'has_aggregate': has_aggregate, 'cell_area': cell_area, 'cell_mean_intensity': cell_mean_intensity, 'cell_total_intensity': cell_total_intensity}
+            cell_measurements[cell_id] = {'has_aggregate': has_aggregate, 'cell_area': cell_area, 'cell_mean_intensity': cell_mean_intensity, 'cell_total_intensity': cell_total_intensity, 'cell_variance_intensity': cell_variance_intensity, 'cell_sd_intensity': cell_sd_intensity}
         
         # agg_count = sum(1 for cell_data in cell_measurements.values() if cell_data.get('has_aggregate') is True)
 
