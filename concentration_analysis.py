@@ -62,8 +62,11 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
            # for cells with foci, make it such that cell metrics exclude the aggregates
            rest_of_cell_mean_intensity = np.mean(fluorescent_img[remaining_cell_mask])
            rest_of_cell_total_intensity = np.sum(fluorescent_img[remaining_cell_mask])
+           rest_of_cell_variance_intensity = np.var(fluorescent_img[remaining_cell_mask])
+           rest_of_cell_sd_intensity = np.std(fluorescent_img[remaining_cell_mask])
 
-           cell_measurements[cell_id] = {'has_aggregate': has_aggregate, 'cell_area': cell_area, 'cell_mean_intensity': cell_mean_intensity, 'cell_total_intensity': cell_total_intensity, 'cell_variance_intensity': cell_variance_intensity, 'cell_sd_intensity': cell_sd_intensity, 'aggregate_total_intensity': aggregate_total_intensity, 'aggregate_mean_intensity': aggregate_mean_intensity, 'rest_of_cell_mean_intensity': rest_of_cell_mean_intensity, 'rest_of_cell_total_intensity': rest_of_cell_total_intensity}
+
+           cell_measurements[cell_id] = {'has_aggregate': has_aggregate, 'cell_area': cell_area, 'cell_mean_intensity': cell_mean_intensity, 'cell_total_intensity': cell_total_intensity, 'cell_variance_intensity': cell_variance_intensity, 'cell_sd_intensity': cell_sd_intensity, 'aggregate_total_intensity': aggregate_total_intensity, 'aggregate_mean_intensity': aggregate_mean_intensity, 'rest_of_cell_mean_intensity': rest_of_cell_mean_intensity, 'rest_of_cell_total_intensity': rest_of_cell_total_intensity, 'rest_of_cell_variance_intensity': rest_of_cell_variance_intensity, 'rest_of_cell_sd_intensity': rest_of_cell_sd_intensity}
 
             
         # metrics to store for cells without foci
