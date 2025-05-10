@@ -41,17 +41,18 @@ def run_cellpose_segmentation(image_path, diameter=None):
    
     print("Used diameter", diameter)
 
-    # plot masks to make sure they're the same for an example picture as from the GUI
-    fig = plt.figure()
-    plot.show_segmentation(fig, image, masks, flows[0], channels=channels)
-    plt.tight_layout()
-    plt.show()
+    if __name__ == '__main__':
+        # plot masks to make sure they're the same for an example picture as from the GUI
+        fig = plt.figure()
+        plot.show_segmentation(fig, image, masks, flows[0], channels=channels)
+        plt.tight_layout()
+        plt.show()
 
     return masks
 
 # test with some brightfield image
 if __name__ == '__main__':
-    image_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/Q10E_log_brightfield.png" 
+    image_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_brightfield.png' 
     run_cellpose_segmentation(image_path)
 
 
