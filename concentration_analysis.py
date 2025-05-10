@@ -13,7 +13,7 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
     
     # load fluorescent image as numpy arrat to be able to perform calculations on it
     fluorescent_img = imread(fluorescent_img_path)
-
+    #print(fluorescent_img.shape)
 
     # get unique cells IDs and explicitly exclude the background
     unique_cells = np.unique(cell_masks)
@@ -105,7 +105,6 @@ def visualize_metrics(fluorescent_img_path):
 
 
 
-
 if __name__ == '__main__':
     # compre mutant E3Q at the beginning and end
     brightfield_path = '/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_log_brightfield.png' 
@@ -114,7 +113,7 @@ if __name__ == '__main__':
     # fluorescent_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_t0_fluorescent.png"
     cells_with_aggregates, cell_masks = cells_with_foci(brightfield_path, fluorescent_path)
     cell_metrics(fluorescent_path, cell_masks, cells_with_aggregates)
-    visualize_metrics(fluorescent_path)
+    #visualize_metrics(fluorescent_path)
 
 
 
