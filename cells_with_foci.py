@@ -28,10 +28,8 @@ def cells_with_foci(brightfield_path, fluorescent_path):
 
     print(f"Found {len(cells_with_aggregates)} cells containing aggregates out of {len(np.unique(cell_masks)) - 1} total cells")
 
-    # visualize
-    visualize_results(cell_masks, cells_with_aggregates, fluorescent_img)
 
-    return cells_with_aggregates, cell_masks
+    return cells_with_aggregates, cell_masks, fluorescent_img
 
 
 def visualize_results(cell_masks, cells_with_aggregates, fluorescent_img):
@@ -56,10 +54,8 @@ if __name__ == "__main__":
     # fluorescent_path = '/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_log_fluorescent.png' 
     brightfield_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_t0_brightfield.png" 
     fluorescent_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_t0_fluorescent.png" 
-
-
-    cells_with_aggregates, cell_masks = cells_with_foci(brightfield_path, fluorescent_path)
-
+    cells_with_aggregates, cell_masks, fluorescent_img = cells_with_foci(brightfield_path, fluorescent_path)
+    visualize_results(cell_masks, cells_with_aggregates, fluorescent_img)
 
 
 
