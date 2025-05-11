@@ -90,12 +90,46 @@ def plot_metrics(quadrant_metrics):
             quadrants_average_intensities[quadrant] = total_intensity / total_area
         else:
             quadrants_average_intensities[quadrant] = 0
-      
+
+     # compute average mean intensity across cells in each quadrant
+    quadrants_average_mean_intensities = {}
+    for quadrant, metrics_list in quadrant_metrics.items():
+        total_mean_intensity = sum([metrics['cell_mean_intensity'] for metrics in metrics_list])
+        cell_count = len(metrics_list)
+        if cell_count > 0:      # avoid division by 0 if there is an empty quadrant
+            quadrants_average_mean_intensities[quadrant] = total_mean_intensity / cell_count
+        else:
+            quadrants_average_mean_intensities[quadrant] = 0
+
     plt.bar(quadrants_average_intensities.keys(), quadrants_average_intensities.values(), color = ['blue', 'red', 'green', 'yellow'])
     plt.xlabel('Quadrants')
     plt.ylabel('Total intensity / total area')
     plt.title('Total cell intensity divided by total cell area for the cells in each quadrant')
     plt.show()
+
+    plt.bar(quadrants_average_mean_intensities.keys(), quadrants_average_mean_intensities.values(), color = ['blue', 'red', 'green', 'yellow'])
+    plt.xlabel('Quadrants')
+    plt.ylabel('Average mean intensity')
+    plt.title('Sum of mean intensities averaged by the number of cells')
+    plt.show()
+
+    # plot distribution of mean cell intensities for all cells within a quadrant
+    quadrant_names = ['top_left', 'top_right', 'bottom_left', 'bottom_right']
+    plt.figure(figsize=(12,10))
+    
+    for index, quadrant in enumerate(quadrant_names, start=1):
+        plt.subplot(2, 2, index)
+        # get mean cell intensity for each cell in the quadrant
+        mean_intensities = [metrics['cell_mean_intensity'] for metrics in metrics_list]
+    
+        plt.bar(range(len(mean_intensities)), mean_intensities)
+        plt.xlabel('Cell index')
+        plt.ylabel('Mean intensity')
+        plt.title(f'Distribution of mean cell intensities in ({quadrant}) quadrant')
+
+    plt.tight_layout()
+    plt.show()
+
 
 
 
