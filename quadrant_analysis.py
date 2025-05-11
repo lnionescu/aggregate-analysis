@@ -77,10 +77,23 @@ def get_quadrant_metrics(fluorescent_img_path, brightfield_img_path):
     return quadrant_metrics
 
 
-def plot_metrics(summary):
+def plot_metrics(quadrant_metrics):
     '''
-    i guess a histogram for each metric with one bar for each quadrant
+    for testing: histogram for each metric with one bar for each quadrant
     '''
+    # get total_intensity/total_area across the cells in each quadrant
+    quadrants_average_intensities = {}
+    for quadrant, metrics_list in quadrant_metrics.items():
+        cell_intensities = [metrics['cell_total_intensity'] for metrics in metrics_list]
+        cell_areas = [metrics['cell_area'] for metrics in metrics_list]
+           
+
+    
+
+
+
+
+
 
     pass
 
