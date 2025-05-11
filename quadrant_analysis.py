@@ -84,26 +84,28 @@ def plot_metrics(quadrant_metrics):
     # get total_intensity/total_area across the cells in each quadrant
     quadrants_average_intensities = {}
     for quadrant, metrics_list in quadrant_metrics.items():
-        cell_intensities = [metrics['cell_total_intensity'] for metrics in metrics_list]
-        cell_areas = [metrics['cell_area'] for metrics in metrics_list]
-           
+        total_intensity = sum([metrics['cell_total_intensity'] for metrics in metrics_list])
+        total_area = sum([metrics['cell_area'] for metrics in metrics_list]) 
+        if total_area > 0:       # avoid division by 0, if there is some empty quadrant
+            quadrants_average_intensities[quadrant] = total_intensity / total_area
+        else:
+            quadrants_average_intensities[quadrant] = 0
+      
+    plt.bar(quadrants_average_intensities.keys(), quadrants_average_intensities.values(), color = ['blue', 'red', 'green', 'yellow'])
+    plt.xlabel('Quadrants')
+    plt.ylabel('Total intensity / total area')
+    plt.title('Total cell intensity divided by total cell area for the cells in each quadrant')
+    plt.show()
 
-    
 
-
-
-
-
-
-    pass
 
 if __name__ == '__main__':
     fluorescent_img_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_fluorescent.png' 
     brightfield_img_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_brightfield.png' 
     quadrants = get_quadrants(fluorescent_img_path)
     quadrant_metrics = get_quadrant_metrics(fluorescent_img_path, brightfield_img_path)
-    print(quadrant_metrics)
-    #plot_metrics(summary)
+    #print(quadrant_metrics)
+    plot_metrics(quadrant_metrics)
 
 
 
