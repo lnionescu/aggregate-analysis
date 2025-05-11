@@ -14,6 +14,9 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
     # load fluorescent image as numpy arrat to be able to perform calculations on it
     fluorescent_img = imread(fluorescent_img_path)
     #print(fluorescent_img.shape)
+    #fluorescent_img = fluorescent_img[:, :, 0]
+    #print(fluorescent_img.shape)
+    #fluorescent_img = fluorescent_img[:, :, 2]
 
     # get unique cells IDs and explicitly exclude the background
     unique_cells = np.unique(cell_masks)
@@ -24,7 +27,9 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
 
     # process the cells
     for cell_id in unique_cells:
-        # select the pixels from the cell masks that belong to the current cell, to perform measurements on
+    # for cell_id in range(1,2):
+     
+       # select the pixels from the cell masks that belong to the current cell, to perform measurements on
         cell_mask = cell_masks == cell_id
         # print(cell_mask)
        
@@ -77,8 +82,9 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
 
         # print('Dictionary says that',agg_count, 'cells have aggregates')
 
-
-    print(cell_measurements)
+    if __name__ == '__main__':
+        print(cell_measurements)
+    
     return cell_measurements
 
 
@@ -107,11 +113,9 @@ def visualize_metrics(fluorescent_img_path):
 
 if __name__ == '__main__':
     # compre mutant E3Q at the beginning and end
-    brightfield_path = '/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_log_brightfield.png' 
-    fluorescent_path = '/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_log_fluorescent.png' 
-    # brightfield_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_t0_brightfield.png" 
-    # fluorescent_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_t0_fluorescent.png"
-    cells_with_aggregates, cell_masks = cells_with_foci(brightfield_path, fluorescent_path)
+    brightfield_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_brightfield.png' 
+    fluorescent_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_fluorescent.png' 
+    cells_with_aggregates, cell_masks, _ = cells_with_foci(brightfield_path, fluorescent_path)
     cell_metrics(fluorescent_path, cell_masks, cells_with_aggregates)
     #visualize_metrics(fluorescent_path)
 
