@@ -11,15 +11,16 @@ as first metrics, use mean cell intensity and cell variance intensity (calculate
 this is applied to the fluorescent image
 '''
 
-def get_quadrants(fluorescent_img_path):
+def get_quadrants(fluorescent_img_path):    
     '''
     input: path to fluorescent image
     output: numpy arrays corresponding to the four quadrants of the image
     '''
 
-    fluorescent_img = imread(fluorescent_img_path)
-    rows, columns = fluorescent_img.shape
-
+    fluorescent_img = imread(fluorescent_img_path)  
+    print(fluorescent_img.shape)
+    rows, columns, _ = fluorescent_img.shape
+    
     # extract the four quadrants
     top_left = fluorescent_img[:rows//2, :columns//2]
     top_right = fluorescent_img[:rows//2, columns//2:]
@@ -28,9 +29,9 @@ def get_quadrants(fluorescent_img_path):
 
     quadrants = {'top_left': top_left, 'top_right': top_right, 'bottom_left': bottom_left, 'bottom_right': bottom_right}
 
-    return quadrants
+    return rows, columns, quadrants
 
-def get_metrics(quadrants, fluorescent_img_path, brightfield_img_path):
+def get_quadrant_metrics(fluorescent_img_path, brightfield_img_path):
     '''
     input: numpy arrays corresponding to the four quadrnts of the image under analysis
     purpose: using concentration_analysis (which already does all the segmentation and aggregate detection and whatever), extract the mean cell intensity and the
@@ -40,9 +41,13 @@ def get_metrics(quadrants, fluorescent_img_path, brightfield_img_path):
     '''
 
     # use concentration_analysis.py to get all metrics for all cells in the image (can be changed later to only extract mean and variance, in case this is too slow)
-    cells_with_aggregates, cell_masks = cells_with_foci(brightfield_path, fluorescent_path)
-    all_metrics = cell_metrics(fluorescent_path, cell_masks, cells_with_aggregates)
+    cells_with_aggregates, cell_masks, _ = cells_with_foci(brightfield_img_path, fluorescent_img_path)
+    all_metrics = cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates)
     
+    # extract image dimensions
+    fluorescent_img = imread(fluorescent_img_path)
+    rows, columns, _ = fluorescent_img.shape
+
     # initialize dictionary for cell metrics separated by quadrant
     quadrant_metrics = {'top_left': [], 'top_right': [], 'bottom_left': [], 'bottom_right': []}
 
@@ -54,11 +59,21 @@ def get_metrics(quadrants, fluorescent_img_path, brightfield_img_path):
         cell_coords = np.argwhere(cell_mask)
        
         # check if current cell belongs to each quadrant
-        
+        for coord in cell_coords:     # assign cells to a unique quadrant; if some cell happens to span multiple quadrants, just don't get the metrics for it because we can live without
+            row, col = coord
+            if row < rows//2 and col < columns//2:
+                quadrant_metrics['top_left'].append(metrics)
+                break
+            elif row < rows//2 and col >= columns//2:
+                quadrant_metrics['top_right'].append(metrics)
+                break
+            elif row >= rows//2 and col < columns//2:
+                quadrant_metrics['bottom_left'].append(metrics)
+                break
+            elif row >= rows//2 and col >= columns//2:
+                quadrant_metrics['bottom_right'].append(metrics)
+                break
     
-
-
-
     return quadrant_metrics
 
 
@@ -70,10 +85,12 @@ def plot_metrics(summary):
     pass
 
 if __name__ == '__main__':
-    fluorescent_img_path = '/Users/nataliaionescu/Documents/PKM2 aggregation/pngs_for_experimenting/E3Q_t0_fluorescent.png' 
+    fluorescent_img_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_fluorescent.png' 
+    brightfield_img_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_brightfield.png' 
     quadrants = get_quadrants(fluorescent_img_path)
-    summary = get_metrics(quadrants)
-    plot_metrics(summary)
+    quadrant_metrics = get_quadrant_metrics(fluorescent_img_path, brightfield_img_path)
+    print(quadrant_metrics)
+    #plot_metrics(summary)
 
 
 
