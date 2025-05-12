@@ -4,6 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from concentration_analysis import cell_metrics
 from cells_with_foci import cells_with_foci 
+import os
 
 '''
 splits the image in four quadrants to quantify the spatial variation of the degree of protein aggregation
@@ -77,10 +78,15 @@ def get_quadrant_metrics(fluorescent_img_path, brightfield_img_path):
     return quadrant_metrics
 
 
-def plot_metrics(quadrant_metrics):
+def plot_metrics(quadrant_metrics, save_path = 'testing_plots'):
     '''
     for testing: histogram for each metric with one bar for each quadrant
     '''
+    os.makedirs(save_path, exist_ok = True)
+
+
+
+
     # get total_intensity/total_area across the cells in each quadrant
     quadrants_average_intensities = {}
     for quadrant, metrics_list in quadrant_metrics.items():
@@ -105,13 +111,14 @@ def plot_metrics(quadrant_metrics):
     plt.xlabel('Quadrants')
     plt.ylabel('Total intensity / total area')
     plt.title('Total cell intensity divided by total cell area for the cells in each quadrant')
-    plt.show()
+    plt.savefig(os.path.join(save_path, 'mean_intensity.png'))
+
 
     plt.bar(quadrants_average_mean_intensities.keys(), quadrants_average_mean_intensities.values(), color = ['blue', 'red', 'green', 'yellow'])
     plt.xlabel('Quadrants')
     plt.ylabel('Average mean intensity')
     plt.title('Sum of mean intensities averaged by the number of cells')
-    plt.show()
+    plt.savefig(os.path.join(save_path, 'avg_mean_intensity.png'))
 
     # plot distribution of mean cell intensities for all cells within a quadrant
     quadrant_names = ['top_left', 'top_right', 'bottom_left', 'bottom_right']
@@ -128,8 +135,20 @@ def plot_metrics(quadrant_metrics):
         plt.title(f'Distribution of mean cell intensities in ({quadrant}) quadrant')
 
     plt.tight_layout()
-    plt.show()
+    plt.savefig(os.path.join(save_path, 'mean_intensity_distribution.png'))
 
+    # plot distribution of cell variances for all cells within a quadrant
+    plt.figure(figsize=(12,10))
+    for index, quadrant in enumerate(quadrant_names, start=1):
+        plt.subplot(2, 2, index)
+        variances = [metrics['cell_variance_intensity'] for metrics in quadrant_metrics[quadrant]]
+        plt.bar(range(len(variances)), variances)
+        plt.xlabel('Cell index')
+        plt.ylabel('Variance of intensity')
+        plt.title(f'Distribution of intensity variances in {quadrant} quadrant')
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(save_path, 'variances_distribution.png'))
 
 
 
@@ -140,6 +159,12 @@ if __name__ == '__main__':
     quadrant_metrics = get_quadrant_metrics(fluorescent_img_path, brightfield_img_path)
     #print(quadrant_metrics)
     plot_metrics(quadrant_metrics)
+
+
+
+
+
+
 
 
 
