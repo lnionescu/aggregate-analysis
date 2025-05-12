@@ -16,17 +16,14 @@ def get_time_evolution(nd2_file_path):
     '''
     # open the entire nd2 file
     with nd2.ND2File(nd2_file_path) as nd2_file:
-        num_series = nd2_file.sizes.get('S', 1)
-        time_points = range(num_series)
-        print(time_points)
- 
+        print(nd2_file.sizes)
         # dictionary with time evolution of chosen metric for each quadrant
         time_evolution = {'top_left': [], 'top_right': [], 'bottom_left': [], 'bottom_right': []}
   
   
 if __name__ == '__main__':
-    #nd2_file_path = '/Users/nataliaionescu/Documents/PKM2/PKM2_E3Q_ChannelBrightfield,GFP_Seq0001    .nd2' 
-    plot_time_evolution(nd2_file_path)
+    nd2_file_path = '/Users/nataliaionescu/Documents/PKM2/PKM2_E3Q_ChannelBrightfield,GFP_Seq0001.nd2' 
+    get_time_evolution(nd2_file_path)
 
 
 
