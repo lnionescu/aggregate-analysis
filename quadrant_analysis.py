@@ -63,18 +63,20 @@ def get_quadrant_metrics(fluorescent_img_path, brightfield_img_path):
         for coord in cell_coords:     # assign cells to a unique quadrant; if some cell happens to span multiple quadrants, just don't get the metrics for it because we can live without
             row, col = coord
             if row < rows//2 and col < columns//2:
-                quadrant_metrics['top_left'].append(metrics)
+                quadrant = 'top_left'
                 break
             elif row < rows//2 and col >= columns//2:
-                quadrant_metrics['top_right'].append(metrics)
+                quadrant = 'top_right'
                 break
             elif row >= rows//2 and col < columns//2:
-                quadrant_metrics['bottom_left'].append(metrics)
+                quadrant = 'bottom_left'
                 break
             elif row >= rows//2 and col >= columns//2:
-                quadrant_metrics['bottom_right'].append(metrics)
+                quadrant = 'bottom_right'
                 break
-    
+
+            quadrant_metrics[quadrant].append(metrics)
+
     return quadrant_metrics
 
 
