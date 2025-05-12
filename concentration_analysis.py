@@ -13,10 +13,6 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
     
     # load fluorescent image as numpy arrat to be able to perform calculations on it
     fluorescent_img = imread(fluorescent_img_path)
-    #print(fluorescent_img.shape)
-    #fluorescent_img = fluorescent_img[:, :, 0]
-    #print(fluorescent_img.shape)
-    #fluorescent_img = fluorescent_img[:, :, 2]
 
     # get unique cells IDs and explicitly exclude the background
     unique_cells = np.unique(cell_masks)
@@ -31,7 +27,6 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
      
        # select the pixels from the cell masks that belong to the current cell, to perform measurements on
         cell_mask = cell_masks == cell_id
-        # print(cell_mask)
        
         # identify whether the current cell is among cells_with_aggregates
         has_aggregate = cell_id in cells_with_aggregates
@@ -86,28 +81,6 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
         print(cell_measurements)
     
     return cell_measurements
-
-
-def visualize_metrics(fluorescent_img_path):
-    cell_measurements = cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates)
-    
-    # convert to pandas dataframe 
-    cell_measurements_df = pd.DataFrame.from_dict(cell_measurements, orient='index')
-
-    # filter rows for cells with aggregates
-    df_with_aggregates = cell_measurements_df[cell_measurements_df['has_aggregate'] == True]
-
-    # scatter plot: mean aggregate intensity vs mean total cell (including the aggregate) intensity 
-    sns.scatterplot(data = df_with_aggregates, x = 'cell_mean_intensity', y = 'aggregate_mean_intensity')
-    plt.title("Mean aggregate intensity vs mean cell (excluding the aggregate) intensity")
-    plt.xlabel("Mean cell (excluding the aggregate) intensity")
-    plt.ylabel("Mean aggregate intensity")
-    plt.show()
-
-
-
-
-
 
 
 
