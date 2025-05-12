@@ -51,6 +51,7 @@ def get_quadrant_metrics(fluorescent_img_path, brightfield_img_path):
 
     # initialize dictionary for cell metrics separated by quadrant
     quadrant_metrics = {'top_left': [], 'top_right': [], 'bottom_left': [], 'bottom_right': []}
+    quadrant_aggregate_counts = {'top_left': 0, 'top_right': 0, 'bottom_left': 0, 'bottom_right': 0}
 
     # assign cells to quadrants based on the coordinates of the cell masks
     for cell_id, metrics in all_metrics.items():
@@ -74,13 +75,16 @@ def get_quadrant_metrics(fluorescent_img_path, brightfield_img_path):
             elif row >= rows//2 and col >= columns//2:
                 quadrant = 'bottom_right'
                 break
-
+            
+            # append metrics of current cell to the quadrant it resides in
             quadrant_metrics[quadrant].append(metrics)
+            if metrics['has_aggregate']:
+                quadrant_aggregate_counts[quadrant] += 1
 
-    return quadrant_metrics
+    return quadrant_metrics, quadrant_aggregate_counts
 
 
-def plot_metrics(quadrant_metrics, save_path = 'testing_plots'):
+def plot_metrics(quadrant_metrics, quadrant_aggregate_counts, save_path = 'testing_plots'):
     '''
     for testing: histogram for each metric with one bar for each quadrant
     '''
@@ -152,13 +156,21 @@ def plot_metrics(quadrant_metrics, save_path = 'testing_plots'):
     plt.tight_layout()
     plt.savefig(os.path.join(save_path, 'variances_distribution.png'))
 
+    
+    # plot distribution of aggregate counts across quadrants
+    plt.bar(quadrant_aggregate_counts.keys(), quadrant_aggregate_counts.values())
+    plt.xlabel('Quadrants')
+    plt.ylabel('Number of cells with aggregates')
+    plt.title('Distribution of cells with foci across quadrants')
+
+
 
 
 if __name__ == '__main__':
     fluorescent_img_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_fluorescent.png' 
     brightfield_img_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_brightfield.png' 
     quadrants = get_quadrants(fluorescent_img_path)
-    quadrant_metrics = get_quadrant_metrics(fluorescent_img_path, brightfield_img_path)
+    quadrant_metrics, quadrant_aggregate_counts = get_quadrant_metrics(fluorescent_img_path, brightfield_img_path)
     #print(quadrant_metrics)
     plot_metrics(quadrant_metrics)
 
