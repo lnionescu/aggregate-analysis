@@ -13,8 +13,7 @@ program to detect aggregates in the picture by their distincitve characteristics
 # top hat filteting an image isolates features that are brighter than their surroundings
 
 
-def detect_aggregates(image_path, structure_element_size=7, min_distance=7, threshold=0.1):
-    img = io.imread(image_path)
+def detect_aggregates(img, structure_element_size=7, min_distance=7, threshold=0.1):
     gray = color.rgb2gray(img)
 
 
@@ -51,6 +50,6 @@ def visualize_results(img, tophat, coords):
 if __name__ == '__main__':
     # load an example fluorescent image
     image_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_fluorescent.png' 
-
-    img, tophat, coords = detect_aggregates(image_path)
+    image = io.imread(image_path)
+    img, tophat, coords = detect_aggregates(image)
     visualize_results(img, tophat, coords)
