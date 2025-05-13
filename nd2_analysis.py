@@ -13,15 +13,23 @@ this doesn't have any extra functions, it is simply meant to process nd2 files a
 
 # start by understanding the dimensions of the nd2 files and how to extract what i need to apply previous methods
 
-nd2_file_path = '/Users/nataliaionescu/Documents/PKM2/PKM2_WT_ChannelBrightfield,GFP_Seq0000.nd2' 
+def separate_channels(nd2_file_path, output_dir='./output'):
+    os.makedirs(output_dir, exist_ok=True)
 
-def process_nd2_file(nd2_file_path):
     with nd2.ND2File(nd2_file_path) as nd2_file:
-        metadata = nd2_file.metadata
-        dimensions = nd2_file.sizes
-        print(dimensions)
 
-process_nd2_file(nd2_file_path)
+        brightfield_img = nd2_file.asarray()[0, 0, 0]   # [series, z, channel, y, x]
+        fluorescent_img = nd2_file.asarray()[0, 0, 1]   # [series, z, channel, y, x]
+
+        brightfield_path = os.path.join(output_dir, 'brightfield.png')
+        fluorescent_path = os.path.join(output_dir, 'fluorescent.png')
+
+        plt.imsave(brightfield_path, brightfield_img, cmap='gray')
+        plt.imsave(fluorescent_path, fluorescent_img, cmap='gray')
+
+if __name__ == '__main__':
+    nd2_file_path = '/Users/nataliaionescu/Documents/PKM2/PKM2_E3Q_ChannelBrightfield,GFP_Seq0001.nd2' 
+    separate_channels(nd2_file_path)
 
 
 
