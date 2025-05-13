@@ -4,26 +4,7 @@ import matplotlib.pyplot as plt
 import nd2
 
 '''
-should be able to extract all necessary data from a .nd2 file: ie separate z-slices and channels
-test this for one mutant before i get to the full automation script
+this will be complete once i have all nd2 cell measurements as csv files; this module's purpose is to organize input files by mutant, get a time ordering and setup file saving logic so that everything is organized 
 '''
-
-from quadrant_analysis import get_quadrants, get_quadrant_metrics
-def get_time_evolution(nd2_file_path):
-    '''
-    input: path to nd2 file
-    output: dictionary containing the time evolution of some metric for each quadrant
-    '''
-    # open the entire nd2 file
-    with nd2.ND2File(nd2_file_path) as nd2_file:
-        print(nd2_file.sizes)
-        # dictionary with time evolution of chosen metric for each quadrant
-        time_evolution = {'top_left': [], 'top_right': [], 'bottom_left': [], 'bottom_right': []}
-  
-  
-if __name__ == '__main__':
-    nd2_file_path = '/Users/nataliaionescu/Documents/PKM2/PKM2_E3Q_ChannelBrightfield,GFP_Seq0001.nd2' 
-    get_time_evolution(nd2_file_path)
-
 
 
