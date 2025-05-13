@@ -5,17 +5,17 @@ import numpy as np
 from aggregate_detector import detect_aggregates
 from cellpose_runner import run_cellpose_segmentation
 from cellpose import plot
+from skimage import io
 
-
-def cells_with_foci(brightfield_path, fluorescent_path):
+def cells_with_foci(brightfield_img, fluorescent_img):
     
     # get cell masks from brightfield image
     print("Segmenting")
-    cell_masks = run_cellpose_segmentation(brightfield_path)
+    cell_masks = run_cellpose_segmentation(brightfield_img)
 
     # detect aggregates in the fluorescent image
     print("Detecting")
-    fluorescent_img, tophat, aggregate_coords = detect_aggregates(fluorescent_path)
+    fluorescent_img, tophat, aggregate_coords = detect_aggregates(fluorescent_img)
 
     # keep track of which cell IDs contain aggregates
     cells_with_aggregates = []
@@ -52,9 +52,12 @@ if __name__ == "__main__":
     # brightfield_path = '/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_log_brightfield.png' 
     # fluorescent_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/enhanced_E3Q_log_fluorescent.png" 
     # fluorescent_path = '/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_log_fluorescent.png' 
-    brightfield_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_t0_brightfield.png" 
-    fluorescent_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_t0_fluorescent.png" 
-    cells_with_aggregates, cell_masks, fluorescent_img = cells_with_foci(brightfield_path, fluorescent_path)
+    brightfield_path = "/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_brightfield.png" 
+    fluorescent_path = "/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_fluorescent.png" 
+    brightfield_img = io.imread(brightfield_path)
+    fluorescent_img = io.imread(fluorescent_path)
+
+    cells_with_aggregates, cell_masks, fluorescent_img = cells_with_foci(brightfield_img, fluorescent_img)
     visualize_results(cell_masks, cells_with_aggregates, fluorescent_img)
 
 
