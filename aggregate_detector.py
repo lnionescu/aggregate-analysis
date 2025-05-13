@@ -50,7 +50,7 @@ def visualize_results(img, tophat, coords):
 
 if __name__ == '__main__':
     # load an example fluorescent image
-    image_path = "pngs_for_experimenting/log_fluorescent.png"
+    image_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_fluorescent.png' 
 
     img, tophat, coords = detect_aggregates(image_path)
     visualize_results(img, tophat, coords)
