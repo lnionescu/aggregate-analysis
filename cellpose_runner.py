@@ -19,14 +19,11 @@ def calibrate_size(image, channels=[0, 0]):
     
     return estimated_diameter
 
-def run_cellpose_segmentation(image_path, diameter=None):
+def run_cellpose_segmentation(image, diameter=None):
     '''
     Run cellpose on a single image using the cyto3 model. Produces the same result as the cellpose GUI with calibration
     outputs: numpy array masks (each cell has an integer ID)
     '''
-
-    # load image
-    image = io.imread(image_path)
 
     if diameter is None:
         diameter = calibrate_size(image)
@@ -53,7 +50,8 @@ def run_cellpose_segmentation(image_path, diameter=None):
 # test with some brightfield image
 if __name__ == '__main__':
     image_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_brightfield.png' 
-    run_cellpose_segmentation(image_path)
-
-
+  # load image
+    image = io.imread(image_path)
+    run_cellpose_segmentation(image)
+   
 
