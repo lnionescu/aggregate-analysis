@@ -17,6 +17,7 @@ def detect_aggregates(image_path, structure_element_size=7, min_distance=7, thre
     img = io.imread(image_path)
     gray = color.rgb2gray(img)
 
+
     # white top-hat
     str_element = disk(structure_element_size)
     tophat = white_tophat(gray, str_element)
