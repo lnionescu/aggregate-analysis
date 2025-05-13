@@ -5,6 +5,7 @@ from aggregate_detector import detect_aggregates
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
     '''
@@ -77,11 +78,27 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
 
         # print('Dictionary says that',agg_count, 'cells have aggregates')
 
-    if __name__ == '__main__':
-        print(cell_measurements)
-    
+    save_to_csv(fluorescent_img_path, cell_measurements)
+
     return cell_measurements
 
+def save_measurements_to_csv(fluorescent_img_path, cell_measurements):
+    '''
+    saves the dictionary of cell measurements as a csv file
+    '''
+    # extract the base name of the fluorescent image file that's being processed: include this in the csv file name to not get things confused later
+    base_name = os.path.splitext(os.path.basename(fluorescent_img_path))[0]
+
+    # define/create an output directory
+    output_dir = 'output_cell_measurements'
+    os.makedirs(output_dir, exist_ok = True)
+
+    # define output file path
+    output_file = os.path.join(output_dir, f'{base_name}_cell_measurements.csv')
+
+    # convert dictionary to dataframe and save as csv
+    df = pd.DataFrame.from_dict(cell_measurements, orient='index')
+    df.to_csv(output_file, index_label='Cell ID')
 
 
 if __name__ == '__main__':
@@ -90,7 +107,6 @@ if __name__ == '__main__':
     fluorescent_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_fluorescent.png' 
     cells_with_aggregates, cell_masks, _ = cells_with_foci(brightfield_path, fluorescent_path)
     cell_metrics(fluorescent_path, cell_masks, cells_with_aggregates)
-    #visualize_metrics(fluorescent_path)
 
 
 
