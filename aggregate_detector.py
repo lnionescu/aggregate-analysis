@@ -16,7 +16,6 @@ program to detect aggregates in the picture by their distincitve characteristics
 def detect_aggregates(img, structure_element_size=7, min_distance=7, threshold=0.1):
     gray = color.rgb2gray(img)
 
-
     # white top-hat
     str_element = disk(structure_element_size)
     tophat = white_tophat(gray, str_element)
