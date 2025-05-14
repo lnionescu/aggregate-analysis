@@ -45,7 +45,7 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
 
         # for cells with foci: quantify the mean and total intensity of the aggregate
         if has_aggregate:
-           _, _, aggregate_coords = detect_aggregates(fluorescent_img_path)
+           _, _, aggregate_coords = detect_aggregates(fluorescent_img)
 
            # mask that contains the aggregate in the current cell
            aggregate_mask = np.zeros_like(cell_mask, dtype=bool)
@@ -78,7 +78,7 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
 
         # print('Dictionary says that',agg_count, 'cells have aggregates')
 
-    save_to_csv(fluorescent_img_path, cell_measurements)
+    save_measurements_to_csv(fluorescent_img_path, cell_measurements)
 
     return cell_measurements
 
@@ -102,10 +102,16 @@ def save_measurements_to_csv(fluorescent_img_path, cell_measurements):
 
 
 if __name__ == '__main__':
-    # compre mutant E3Q at the beginning and end
-    brightfield_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_brightfield.png' 
-    fluorescent_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_fluorescent.png' 
-    cells_with_aggregates, cell_masks, _ = cells_with_foci(brightfield_path, fluorescent_path)
+   
+    brightfield_path = '/Users/nataliaionescu/Documents/PKM2/prelim/day1/Formation/E3Q_brightfield.png' 
+    fluorescent_path = '/Users/nataliaionescu/Documents/PKM2/prelim/day1/Formation/E3Q_fluorescent.png' 
+
+
+
+    brightfield_img = imread(brightfield_path)
+    fluorescent_img = imread(fluorescent_path)
+
+    cells_with_aggregates, cell_masks, _ = cells_with_foci(brightfield_img, fluorescent_img)
     cell_metrics(fluorescent_path, cell_masks, cells_with_aggregates)
 
 
