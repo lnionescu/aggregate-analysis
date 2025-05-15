@@ -18,6 +18,7 @@ def get_distribution(cell_measurements, output_folder):
     '''
 
     # TODO modify this function such that it takes a csv file as argument
+    # TODO save csv of RSD values with the full path name of the file
 
     rsd_values = {}     # initialize dict for rsd values
     os.makedirs(output_folder, exist_ok=True)
