@@ -10,11 +10,11 @@ from skimage import io
 def cells_with_foci(brightfield_img, fluorescent_img):
     
     # get cell masks from brightfield image
-    print("Segmenting")
+    #print("Segmenting")
     cell_masks = run_cellpose_segmentation(brightfield_img)
 
     # detect aggregates in the fluorescent image
-    print("Detecting")
+    #print("Detecting")
     fluorescent_img, tophat, aggregate_coords = detect_aggregates(fluorescent_img)
 
     # keep track of which cell IDs contain aggregates
@@ -26,7 +26,7 @@ def cells_with_foci(brightfield_img, fluorescent_img):
         if cell_id > 0:    # ie not background - this shouldn't happen anyway but just in case
             cells_with_aggregates.append(cell_id)
 
-    print(f"Found {len(cells_with_aggregates)} cells containing aggregates out of {len(np.unique(cell_masks)) - 1} total cells")
+    #print(f"Found {len(cells_with_aggregates)} cells containing aggregates out of {len(np.unique(cell_masks)) - 1} total cells")
 
 
     return cells_with_aggregates, cell_masks, fluorescent_img
@@ -49,19 +49,26 @@ def visualize_results(cell_masks, cells_with_aggregates, fluorescent_img):
 
 
 if __name__ == "__main__":
-    # brightfield_path = '/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_log_brightfield.png' 
-    # fluorescent_path = "/Users/nataliaionescu/Documents/project/pngs_for_experimenting/enhanced_E3Q_log_fluorescent.png" 
-    # fluorescent_path = '/Users/nataliaionescu/Documents/project/pngs_for_experimenting/E3Q_log_fluorescent.png' 
-    brightfield_path = "/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_brightfield.png" 
-    fluorescent_path = "/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_fluorescent.png" 
+    brightfield_path = '/Users/nataliaionescu/Documents/PKM2/complete/day3/E3Q_all_data/Series1_Z1_brightfield.png' 
+    fluorescent_path = '/Users/nataliaionescu/Documents/PKM2/complete/day3/E3Q_all_data/Series1_Z1_fluorescent.png' 
+
     brightfield_img = io.imread(brightfield_path)
     fluorescent_img = io.imread(fluorescent_path)
 
     cells_with_aggregates, cell_masks, fluorescent_img = cells_with_foci(brightfield_img, fluorescent_img)
     visualize_results(cell_masks, cells_with_aggregates, fluorescent_img)
 
-
-
+    random_cell_mask = cell_masks == 1
+    # average over rgb channels to be consistent with concentration_analysis.py
+    fluorescent_img_grayscale = np.mean(fluorescent_img[:, :, :3], axis=2)
+    pixel_values = fluorescent_img_grayscale[random_cell_mask]
+    # print(fluorescent_img_grayscale[random_cell_mask])
+    plt.figure(figsize=(10,6))
+    plt.hist(pixel_values.flatten(), bins=50, color='purple')
+    plt.title('Pixel intensity distribution in a typical cell mask')
+    plt.xlabel('Intensity')
+    plt.ylabel('Frequency')
+    plt.show()
 
 
 
