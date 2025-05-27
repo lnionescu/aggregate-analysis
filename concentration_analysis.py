@@ -20,6 +20,7 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates, intens
     
     # load fluorescent image as numpy array to be able to perform calculations on it
     fluorescent_img = imread(fluorescent_img_path)
+    print(fluorescent_img.shape) 
 
     # get unique cells IDs and explicitly exclude the background
     unique_cells = np.unique(cell_masks)
@@ -36,8 +37,9 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates, intens
         cell_mask = cell_masks == cell_id
 
        # apply thresholding to refine the mask
+       # to compare pixel values, average over the rgb channels of the fluorescent image
+        avg_fluorescent = np.mean(fluorescent_img, axis=2)
         if intensity_threshold is not None:
-            pixel_intensities = fluorescent_img[cell_mask]
 
             if threshold_method == 'absolute':
                 threshold_value = intensity_threshold
@@ -45,7 +47,7 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates, intens
                 threshold_value = np.percentile(pixel_intensities, intensity_threshold)
 
             # discard pixels that are below the chosen threshold
-            intensity_mask = fluorescent_img >= threshold_value
+            intensity_mask = avg_fluorescent >= threshold_value
             # get the refined cell mask by only including the pixels that satisfy both conditions: inside the mask of the cell under analysis and exceeding the threshold
             refined_cell_mask = cell_mask & intensity_mask
 
@@ -127,15 +129,16 @@ def save_measurements_to_csv(fluorescent_img_path, cell_measurements):
 
 if __name__ == '__main__':
    
-    brightfield_path = '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/E3Q_all_data/Series1_Z5_brightfield.png' 
-    fluorescent_path = '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/E3Q_all_data/Series1_Z5_fluorescent.png' 
+    brightfield_path = '/Users/nataliaionescu/Documents/PKM2/thresholding/Series1_Z5_brightfield.png' 
+    fluorescent_path = '/Users/nataliaionescu/Documents/PKM2/thresholding/Series1_Z5_fluorescent.png' 
+
 
 
     brightfield_img = imread(brightfield_path)
     fluorescent_img = imread(fluorescent_path)
 
     cells_with_aggregates, cell_masks, _ = cells_with_foci(brightfield_img, fluorescent_img)
-    cell_metrics(fluorescent_path, cell_masks, cells_with_aggregates)
+    cell_metrics(fluorescent_path, cell_masks, cells_with_aggregates, intensity_threshold=5, threshold_method = 'absolute')
 
 
 
