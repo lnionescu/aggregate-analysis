@@ -7,12 +7,18 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
+def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates, intensity_threshold=None, threshold_method='absolute'):
     '''
     makes use of the cells_with_foci.py module to compute various aggregtion metrics for cells both with and without foci
+    Arguments: 
+    fluorescent_img_path: path to fluorescent image (str)
+    cell_masks: masks given by the cell segmentation, as in cellpose_runner.py (numpy array)
+    cells_with_aggregates: list of cell IDs (corresponding to masks) that contain aggregates, as in cells_with_foci.py (list)
+    intensity_threshold: intensity threshold for pixel inclusion in the calculations on the masks; if None, all pixels are included (float, optional)
+    threshold_method: how to eliminate pixels by thresholding (str, 'absolute'/'percentile')
     '''
     
-    # load fluorescent image as numpy arrat to be able to perform calculations on it
+    # load fluorescent image as numpy array to be able to perform calculations on it
     fluorescent_img = imread(fluorescent_img_path)
 
     # get unique cells IDs and explicitly exclude the background
@@ -28,20 +34,39 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
      
        # select the pixels from the cell masks that belong to the current cell, to perform measurements on
         cell_mask = cell_masks == cell_id
+
+       # apply thresholding to refine the mask
+        if intensity_threshold is not None:
+            pixel_intensities = fluorescent_img[cell_mask]
+
+            if threshold_method == 'absolute':
+                threshold_value = intensity_threshold
+            elif threshold_method == 'percentile':
+                threshold_value = np.percentile(pixel_intensities, intensity_threshold)
+
+            # discard pixels that are below the chosen threshold
+            intensity_mask = fluorescent_img >= threshold_value
+            # get the refined cell mask by only including the pixels that satisfy both conditions: inside the mask of the cell under analysis and exceeding the threshold
+            refined_cell_mask = cell_mask & intensity_mask
+
+        else:
+            refined_cell_mask = cell_mask
+            threshold_value = None
+
        
         # identify whether the current cell is among cells_with_aggregates
         has_aggregate = cell_id in cells_with_aggregates
 
         # cell area - number of pixels in the mask
-        cell_area = np.sum(cell_mask)
+        cell_area = np.sum(refined_cell_mask)
 
         # mean and total intensity across cell - from fluorescent image pixel values
-        cell_mean_intensity = np.mean(fluorescent_img[cell_mask])
+        cell_mean_intensity = np.mean(fluorescent_img[refined_cell_mask])
         cell_total_intensity = cell_area * cell_mean_intensity
 
         # variance and standard deviation of the intensity across the entire cell
-        cell_variance_intensity = np.var(fluorescent_img[cell_mask])
-        cell_sd_intensity = np.std(fluorescent_img[cell_mask])
+        cell_variance_intensity = np.var(fluorescent_img[refined_cell_mask])
+        cell_sd_intensity = np.std(fluorescent_img[refined_cell_mask])
 
         # for cells with foci: quantify the mean and total intensity of the aggregate
         if has_aggregate:
@@ -50,7 +75,7 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
            # mask that contains the aggregate in the current cell
            aggregate_mask = np.zeros_like(cell_mask, dtype=bool)
            for y, x in aggregate_coords:
-               if cell_mask[y, x]:     # is the aggregate within the current cell?
+               if refined_cell_mask[y, x]:     # is the aggregate within the current cell?
                    aggregate_mask[y, x] = True
 
             # total and mean intensity of the foci
@@ -58,7 +83,7 @@ def cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates):
            aggregate_mean_intensity = np.mean(fluorescent_img[aggregate_mask])
 
            # mask out aggregates to get metrics about the rest of the cell, bitwise
-           remaining_cell_mask = cell_mask & ~aggregate_mask
+           remaining_cell_mask = refined_cell_mask & ~aggregate_mask
 
            # for cells with foci, make it such that cell metrics exclude the aggregates
            rest_of_cell_mean_intensity = np.mean(fluorescent_img[remaining_cell_mask])
@@ -90,11 +115,10 @@ def save_measurements_to_csv(fluorescent_img_path, cell_measurements):
     base_name = os.path.splitext(os.path.basename(fluorescent_img_path))[0]
 
     # define/create an output directory
-    output_dir = 'output_cell_measurements'
-    os.makedirs(output_dir, exist_ok = True)
+    input_dir = os.path.dirname(fluorescent_img_path)
 
     # define output file path
-    output_file = os.path.join(output_dir, f'{base_name}_cell_measurements.csv')
+    output_file = os.path.join(input_dir, f'{base_name}_cell_measurements.csv')
 
     # convert dictionary to dataframe and save as csv
     df = pd.DataFrame.from_dict(cell_measurements, orient='index')
@@ -103,9 +127,8 @@ def save_measurements_to_csv(fluorescent_img_path, cell_measurements):
 
 if __name__ == '__main__':
    
-    brightfield_path = '/Users/nataliaionescu/Documents/PKM2/prelim/day1/Formation/E3Q_brightfield.png' 
-    fluorescent_path = '/Users/nataliaionescu/Documents/PKM2/prelim/day1/Formation/E3Q_fluorescent.png' 
-
+    brightfield_path = '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/E3Q_all_data/Series1_Z5_brightfield.png' 
+    fluorescent_path = '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/E3Q_all_data/Series1_Z5_fluorescent.png' 
 
 
     brightfield_img = imread(brightfield_path)
