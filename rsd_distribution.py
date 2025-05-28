@@ -7,39 +7,64 @@ import os
 import csv
 
 ''' 
-uses dictionary of cell metrics to get the distribution of relative standard deviation of cell intensities
+Input: csv file of all cell measurements for a certain image
+Output: csv file of RSD values for each cell in the image, calculated both including and excluding foci
 '''
 
-def get_distribution(cell_measurements, output_folder):
+def get_rsd_csv(csv_file_path):
     '''
-    input: dictionary of cell measurements obtained using cell_metrics
-    computes the relative standard deviation (sd/mean) for the intensity of each cell
-    output: dictionary of cell RSDs
+    Input: path to csv of cell measurements
+    Function: computes the relative standard deviation (sd/mean) for the intensities within each cell
+    Output: Saves a csv of the RSD values in the same directory and returns dataframe for plotting
     '''
+    # read csv file of cell measurements
+    df = pd.read_csv(csv_file_path)
 
-    # TODO modify this function such that it takes a csv file as argument
-    # TODO save csv of RSD values with the full path name of the file
+    # get the directory of the input csv file
+    input_dir = os.path.dirname(csv_file_path)
 
-    rsd_values = {}     # initialize dict for rsd values
-    os.makedirs(output_folder, exist_ok=True)
-    output_file = os.path.join(output_folder, 'rsd_values.csv')
+    # extract base name of cell measurements csv
+    base_name = os.path.splitext(os.path.basename(csv_file_path))[0]
+    output_file = os.path.join(input_dir, f'{base_name}_rsd_values.csv')
 
-    # get mean and standard deviation of intensity within each cell
-    for cell_id, metrics in cell_measurements.items():
-        mean_intensity = metrics.get('cell_mean_intensity')
-        sd_intensity = metrics.get('cell_sd_intensity')
-        if mean_intensity > 0:
-            rsd = sd_intensity / mean_intensity
-            rsd_values[cell_id] = rsd
-    
-    with open(output_file, mode='w', newline='') as csv_file:
-        writer = csv.writer(csv_file)
-        writer.writerow(['Cell Index', 'RSD'])   # table header
-        for cell_id, rsd in rsd_values.items():
-            writer.writerow([cell_id, rsd])
+    # list to store results
+    results = []
 
+    # process each cell in the cell measurements csv
+    for _, row in df.iterrows():
+        cell_id = row['Cell ID']
+        has_aggregate = row['has_aggregate']
 
-    return rsd_values
+        # calculate RSD including foci (pixels of the whole cell)
+        mean_intensity_whole = row['cell_mean_intensity']
+        sd_intensity_whole = row['sd_intensity_whole']
+        
+        if mean_intensity_whole > 0:
+            rsd_whole = sd_intensity_whole / mean_intensity_whole
+        else:
+            rsd_whole = 0
+
+        rsd_excluding_foci = None
+        # for cells with aggregates, calculate RSD excluding foci
+        if has_aggregate:
+            mean_intensity_rest = row['rest_of_cell_mean_intensity']
+            sd_intensity_rest = row['rest_of_cell_sd_intensity']
+
+            if mean_intensity_rest > 0:
+                rsd_excluding_foci = sd_intensity_rest / mean_intensity_rest
+            else:
+                rsd_excluding_foci = 0
+
+        # store all results
+        result = {'Cell ID': cell_id, 'has_aggregate': has_aggregate, 'RSD_whole_cell': rsd_whole_cell, 'RSD_excluding_foci': rsd_excluding_foci}
+        results.append(result)
+
+    # convert to dataframe and save in the input directory
+    results_df = pd.DataFrame(results)
+    results_df.to_csv(output_file)
+
+    print(f'RSD values saved to: {output_file}')
+    return results_df
 
 
 
@@ -61,9 +86,6 @@ if __name__ == '__main__':
 
     cells_with_aggregates, cell_masks, _ = cells_with_foci(brightfield_img_path, fluorescent_img_path)
     cell_measurements = cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates)
-    output_folder = 'rsd_results'
-    rsd_values = get_distribution(cell_measurements, output_folder)
-    plot_distribution(rsd_values)
 
 
 
