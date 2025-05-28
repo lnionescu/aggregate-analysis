@@ -4,6 +4,12 @@ from mean_ci import bin_values
 import pandas as pd
 import numpy as np
 
+'''
+Input: csv files of the RSD values for each mutant on the desired day
+Output: histogram with one bar for the mean RSD of each mutant, with error bars calculated from the confidence intervals for the mean of a normal distribution
+'''
+
+
 file_paths = ['/Users/nataliaionescu/Documents/PKM2/prelim/day1/Formation/E3Q_fluorescent.png_cell_rsd.csv', '/Users/nataliaionescu/Documents/PKM2/prelim/day1/Formation/Q10E_fluorescent.png_cell_rsd.csv', '/Users/nataliaionescu/Documents/PKM2/prelim/day1/Formation/WT_fluorescent.png_cell_rsd.csv'   ]
 
 
