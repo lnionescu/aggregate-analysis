@@ -5,6 +5,7 @@ from concentration_analysis import cell_metrics
 from cells_with_foci import cells_with_foci
 import os
 import csv
+import pandas as pd
 
 ''' 
 Input: csv file of all cell measurements for a certain image
@@ -37,7 +38,7 @@ def get_rsd_csv(csv_file_path):
 
         # calculate RSD including foci (pixels of the whole cell)
         mean_intensity_whole = row['cell_mean_intensity']
-        sd_intensity_whole = row['sd_intensity_whole']
+        sd_intensity_whole = row['cell_sd_intensity']
         
         if mean_intensity_whole > 0:
             rsd_whole = sd_intensity_whole / mean_intensity_whole
@@ -56,7 +57,7 @@ def get_rsd_csv(csv_file_path):
                 rsd_excluding_foci = 0
 
         # store all results
-        result = {'Cell ID': cell_id, 'has_aggregate': has_aggregate, 'RSD_whole_cell': rsd_whole_cell, 'RSD_excluding_foci': rsd_excluding_foci}
+        result = {'Cell ID': cell_id, 'has_aggregate': has_aggregate, 'RSD_whole_cell': rsd_whole, 'RSD_excluding_foci': rsd_excluding_foci}
         results.append(result)
 
     # convert to dataframe and save in the input directory
@@ -68,24 +69,40 @@ def get_rsd_csv(csv_file_path):
 
 
 
-def plot_distribution(rsd_values):
+def plot_rsd_distribution(results_df):
     '''
-    input: dictionary of rsd values of all cells in the image under analysis
+    Input: dataframe of rsd values (output of get_rsd_csv() function)
+    Output: two plots of RSD distributions, both including and excluding foci 
     '''
 
-    plt.bar(rsd_values.keys(), rsd_values.values())
+    # plot 1: RSD for the whole cell (all cells)
+    plt.figure(figsize=(12,4))
+    plt.bar(results_df['Cell ID'], results_df['RSD_whole_cell'])
     plt.xlabel('Cell index')
     plt.ylabel('RSD of intensity')
-    plt.title('Distribution of relative standard deviations of cell intensities')
+    plt.title('RSD - Whole cell')
+    plt.show()
+
+    # plot 2: RSD excluding foci (from the cells that have them)
+    rsd_to_plot = []
+    for _, row in results_df.iterrows():
+        if row['has_aggregate'] and pd.notna(row['RSD_excluding_foci']):
+            rsd_to_plot.append(row['RSD_excluding_foci'])
+        else:
+            rsd_to_plot.append(row['RSD_whole_cell'])
+    plt.figure(figsize=(12,4))
+    plt.bar(results_df['Cell ID'], rsd_to_plot)
+    plt.xlabel('Cell index')
+    plt.ylabel('RSD of intensity')
+    plt.title('RSD - excluding foci')
     plt.show()
 
 
 if __name__ == '__main__':
-    fluorescent_img_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_fluorescent.png' 
-    brightfield_img_path = '/Users/nataliaionescu/Documents/PKM2/pngs_for_experimenting/E3Q_t0_brightfield.png' 
+    cell_measurements_csv_path = '/Users/nataliaionescu/Documents/PKM2/thresholding/no_thresholdSeries1_Z5_fluorescent_cell_measurements.csv' 
+    results_df = get_rsd_csv(cell_measurements_csv_path)
+    plot_rsd_distribution(results_df)
 
-    cells_with_aggregates, cell_masks, _ = cells_with_foci(brightfield_img_path, fluorescent_img_path)
-    cell_measurements = cell_metrics(fluorescent_img_path, cell_masks, cells_with_aggregates)
 
 
 
