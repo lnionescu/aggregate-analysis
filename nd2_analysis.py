@@ -9,7 +9,8 @@ from concentration_analysis import cell_metrics, save_measurements_to_csv
 from cells_with_foci import cells_with_foci, visualize_results
 
 '''
-this doesn't have any extra functions, it is simply meant to process nd2 files and save the measurements of their cells as a csv file
+NOT WORKING !!!!!! IGNORE
+
 '''
 
 # start by understanding the dimensions of the nd2 files and how to extract what i need to apply previous methods
