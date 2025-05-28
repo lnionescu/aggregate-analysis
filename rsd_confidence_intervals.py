@@ -2,7 +2,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import stats
-
+'''
+Input: path to csv file of RSD values
+Calculates the mean of these RSD values, with confidence interval
+Output: mean, [lower_ci, upper_ci] confidence interval, plots distribution of RSD values placed in n_bins bins and superimposes the corresponding normal distribution on top
+'''
 
 def bin_values(df, n_bins=100, confidence=0.05):
     '''
