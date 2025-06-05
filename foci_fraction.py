@@ -20,4 +20,30 @@ def calculate_foci_fraction(csv_path):
     return fraction
 
 # file paths for the cell measurements of each mutant (change depending on day)
-file_paths = [']
+file_paths = ['/Users/nataliaionescu/Documents/PKM2/jobs_results/log/E3Q_all_data/Series1_Z1_fluorescent_cell_measurements.csv', '/Users/nataliaionescu/Documents/PKM2/jobs_results/log/Q10E_all_data/Series1_Z1_fluorescent_cell_measurements.csv', '/Users/nataliaionescu/Documents/PKM2/jobs_results/log/WT_all_data/Series1_Z1_fluorescent_cell_measurements.csv']   
+protein_names = ['E3Q', 'Q10E', 'WT']
+fractions = []
+
+for file_path in file_paths:
+    fraction = calculate_foci_fraction(file_path)
+    fractions.append(fraction)
+    print(f'Fraction of cells with foci {fraction:.3f}')
+
+# plot
+plt.figure(figsize=(8,6))
+colors = ['blue', 'orange', 'green']
+bars = plt.bar(protein_names, fractions, color=colors, edgecolor='black')
+
+x = range(len(protein_names))
+plt.xlabel('Protein')
+plt.ylabel('Fraction of cells containing foci')
+ax = plt.gca()
+#ax.set_ylim([1.2, 1.4])
+plt.title('Log: Comparison of fractions of cells containing foci')
+plt.xticks(x, protein_names)
+
+plt.tight_layout()
+plt.show()
+
+  
+
