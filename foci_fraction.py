@@ -18,3 +18,6 @@ def calculate_foci_fraction(csv_path):
     cells_with_foci = df['has_aggregate'].sum()
     fraction = cells_with_foci / total_cells if total_cells > 0 else 0
     return fraction
+
+# file paths for the cell measurements of each mutant (change depending on day)
+file_paths = [']
