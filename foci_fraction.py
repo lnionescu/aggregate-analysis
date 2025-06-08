@@ -15,90 +15,90 @@ def calculate_foci_fraction(csv_path):
 
 # File paths for Series 1
 day1_s1_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/E3Q_all_data/Series1_Z1_fluorescent.png_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/Q10E_all_data/Series1_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/WT_all_data/Series1_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day1/E3Q_Series1_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day1/Q10E_Series1_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day1/WT_Series1_Zsum_fluorescent_cell_measurements.csv'
 ]
 day2_s1_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day2/E3Q_all_data/Series1_Z1_fluorescent_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day2/Q10E_all_data/Series1_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day2/WT_all_data/Series1_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day2/E3Q_Series1_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day2/Q10E_Series1_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day2/WT_Series1_Zsum_fluorescent_cell_measurements.csv'
 ]
 day3_s1_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day3/E3Q_all_data/Series1_Z1_fluorescent_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day3/Q10E_all_data/Series1_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day3/WT_all_data/Series1_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day3/E3Q_Series1_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day3/Q10E_Series1_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day3/WT_Series1_Zsum_fluorescent_cell_measurements.csv'
 ]
 log_s1_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/log/E3Q_all_data/Series1_Z1_fluorescent_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/log/Q10E_all_data/Series1_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/log/WT_all_data/Series1_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_log/E3Q_Series1_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_log/Q10E_Series1_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_log/WT_Series1_Zsum_fluorescent_cell_measurements.csv'
 ]
 
 # File paths for Series 2
 day1_s2_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/E3Q_all_data/Series2_Z1_fluorescent.png_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/Q10E_all_data/Series2_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/WT_all_data/Series2_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day1/E3Q_Series2_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day1/Q10E_Series2_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day1/WT_Series2_Zsum_fluorescent_cell_measurements.csv'
 ]
 day2_s2_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day2/E3Q_all_data/Series2_Z1_fluorescent_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day2/Q10E_all_data/Series2_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day2/WT_all_data/Series2_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day2/E3Q_Series2_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day2/Q10E_Series2_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day2/WT_Series2_Zsum_fluorescent_cell_measurements.csv'
 ]
 day3_s2_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day3/E3Q_all_data/Series2_Z1_fluorescent_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day3/Q10E_all_data/Series2_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day3/WT_all_data/Series2_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day3/E3Q_Series2_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day3/Q10E_Series2_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day3/WT_Series2_Zsum_fluorescent_cell_measurements.csv'
 ]
 log_s2_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/log/E3Q_all_data/Series2_Z1_fluorescent_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/log/Q10E_all_data/Series2_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/log/WT_all_data/Series2_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_log/E3Q_Series2_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_log/Q10E_Series2_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_log/WT_Series2_Zsum_fluorescent_cell_measurements.csv'
 ]
 
 # File paths for Series 3
 day1_s3_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/E3Q_all_data/Series3_Z1_fluorescent.png_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/Q10E_all_data/Series3_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/WT_all_data/Series3_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day1/E3Q_Series3_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day1/Q10E_Series3_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day1/WT_Series3_Zsum_fluorescent_cell_measurements.csv'
 ]
 day2_s3_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day2/E3Q_all_data/Series3_Z1_fluorescent_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day2/Q10E_all_data/Series3_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day2/WT_all_data/Series3_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day2/E3Q_Series3_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day2/Q10E_Series3_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day2/WT_Series3_Zsum_fluorescent_cell_measurements.csv'
 ]
 day3_s3_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day3/E3Q_all_data/Series3_Z1_fluorescent_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day3/Q10E_all_data/Series3_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day3/WT_all_data/Series3_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day3/E3Q_Series3_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day3/Q10E_Series3_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day3/WT_Series3_Zsum_fluorescent_cell_measurements.csv'
 ]
 log_s3_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/log/E3Q_all_data/Series3_Z1_fluorescent_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/log/Q10E_all_data/Series3_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/log/WT_all_data/Series3_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_log/E3Q_Series3_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_log/Q10E_Series3_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_log/WT_Series3_Zsum_fluorescent_cell_measurements.csv'
 ]
 
 # File paths for Series 4
 day1_s4_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/E3Q_all_data/Series4_Z1_fluorescent.png_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/Q10E_all_data/Series4_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day1/WT_all_data/Series4_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day1/E3Q_Series4_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day1/Q10E_Series4_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day1/WT_Series4_Zsum_fluorescent_cell_measurements.csv'
 ]
 day2_s4_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day2/E3Q_all_data/Series4_Z1_fluorescent_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day2/Q10E_all_data/Series4_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day2/WT_all_data/Series4_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day2/E3Q_Series4_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day2/Q10E_Series4_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day2/WT_Series4_Zsum_fluorescent_cell_measurements.csv'
 ]
 day3_s4_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day3/E3Q_all_data/Series4_Z1_fluorescent_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day3/Q10E_all_data/Series4_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/day3/WT_all_data/Series4_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day3/E3Q_Series4_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day3/Q10E_Series4_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_day3/WT_Series4_Zsum_fluorescent_cell_measurements.csv'
 ]
 log_s4_paths = [
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/log/E3Q_all_data/Series4_Z1_fluorescent_cell_measurements.csv',
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/log/Q10E_all_data/Series4_Z1_fluorescent_cell_measurements.csv', 
-    '/Users/nataliaionescu/Documents/PKM2/jobs_results/log/WT_all_data/Series4_Z1_fluorescent_cell_measurements.csv'
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_log/E3Q_Series4_Zsum_fluorescent_cell_measurements.csv',
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_log/Q10E_Series4_Zsum_fluorescent_cell_measurements.csv', 
+    '/Users/nataliaionescu/Documents/PKM2/z_projection_results/nd2_log/WT_Series4_Zsum_fluorescent_cell_measurements.csv'
 ]
 
 protein_names = ['E3Q', 'Q10E', 'WT']
