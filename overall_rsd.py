@@ -2,6 +2,11 @@ import pandas as pd
 import numpy as np
 import glob
 
+'''
+THIS IS LOGICALLY WRONG, IGNORE IT!
+'''
+
+
 # Read all CSV files and collect intensities
 csv_files = glob.glob("/Users/nataliaionescu/Documents/PKM2/complete/day1/E3Q_all_data/*_cell_measurements.csv")
 all_intensities = []
